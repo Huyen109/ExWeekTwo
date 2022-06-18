@@ -64,20 +64,20 @@ public class SavingAccount {
         this.rateDay = rateDay;
     }
 
-    public long calculateSendingDate() throws ParseException {
+    public long calculateSendingDate(String sendingDate) throws ParseException {
         Scanner scanner = new Scanner(System.in);
-        DateFormat simpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        DateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         Date currentDate = new Date();
         Date date1 = null;
         Date date2 = null;
 
-        System.out.println("Nhap vao ngay gui co dang dd-mm-yyyy: ");
-        sendingDays = scanner.next();
+//        System.out.println("Nhap vao ngay gui co dang dd-mm-yyyy: ");
+//        sendingDays = scanner.next();
 
 
         String endDate = simpleDateFormat.format(currentDate);
-        date1 = simpleDateFormat.parse(sendingDays);
+        date1 = simpleDateFormat.parse(sendingDate);
         date2 = simpleDateFormat.parse(endDate);
 
         long getDiff = date2.getTime()-date1.getTime();
@@ -88,36 +88,37 @@ public class SavingAccount {
         return getDaysToSending;
     }
 
-    public int calculateProfitAmount() throws ParseException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Nhap vao so tien goc: ");
-        this.principalAmount = scanner.nextInt();
-        System.out.println("Nhap vao lai suat: ");
-        this.rateDay = scanner.nextFloat();
-        profitAmount = (int) (this.principalAmount * this.rateDay * calculateSendingDate());
+    public int calculateProfitAmount(String sendingDate) throws ParseException {
+
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Nhap vao so tien goc: ");
+//        this.principalAmount = scanner.nextInt();
+//        int a = Math.toIntExact(calculateSendingDate(sendingDays));
+
+        profitAmount = (int) (this.principalAmount * this.rateDay * calculateSendingDate(sendingDate));
 
         return profitAmount;
 
     }
 
-    public void withdrawProfit() throws ParseException {
-        calculateProfitAmount();
+    public void withdrawProfit(String sendingDate) throws ParseException {
+        calculateProfitAmount(sendingDate);
         System.out.println("So tien lai nhan duoc la: "+ this.profitAmount);
         Date currentDate = new Date();
         this.sendingDays = SimpleDateFormat.getDateInstance().format(currentDate);
         System.out.println("Ngay gui hien tai la: "+ this.sendingDays);
     }
 
-    public void withdrawPartialy() throws ParseException {
+    public void withdrawPartialy(String sendingDate) throws ParseException {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Nhap vao so tien rut tu goc: ");
         int moneyWithdrawal = scanner.nextInt();
 
-        int a = calculateProfitAmount();
+        //int a = calculateProfitAmount(sendingDate);
 
         if(moneyWithdrawal <= principalAmount){
-            int moneyReceived = moneyWithdrawal + a;
+            int moneyReceived = moneyWithdrawal + calculateProfitAmount(sendingDate);;
             System.out.println("So tien rut 1 phan tu goc + lai la: " +moneyReceived);
         }
 
@@ -134,8 +135,8 @@ public class SavingAccount {
 //
 //    }
 
-    public void totallyWithdraw() throws ParseException {
-        calculateProfitAmount();
+    public void totallyWithdraw(String sendingDate) throws ParseException {
+        calculateProfitAmount(sendingDate);
         int moneyReceive = this.profitAmount + this.principalAmount;
         System.out.println("So tien goc va lai nhan duoc la: " + moneyReceive);
         Date currentDate = new Date();
@@ -153,7 +154,11 @@ public class SavingAccount {
         accountName = scanner.nextLine();
         System.out.println("Nhap vao tien goc trong tai khoan: ");
         principalAmount = scanner.nextInt();
-        calculateSendingDate();
+        System.out.println("Nhap vao lai suat: ");
+        this.rateDay = scanner.nextFloat();
+        System.out.println("Nhap vao ngay gui co dang dd-mm-yyyy: ");
+        sendingDays = scanner.next();
+        calculateSendingDate(sendingDays);
     }
     public void displayInfo(){
         System.out.println("So tai khoan la " + accountNumber

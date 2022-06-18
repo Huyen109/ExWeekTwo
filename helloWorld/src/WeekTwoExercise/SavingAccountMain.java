@@ -1,18 +1,19 @@
 package WeekTwoExercise;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class SavingAccountMain {
+    static SavingAccount savingAccount = new SavingAccount();
+    static Scanner next = new Scanner(System.in);
+
+    static List<SavingAccount> listSavingAcc = new ArrayList<>();
+
     public static void main(String[] args) throws ParseException {
-//        SavingAccount savingAccount = new SavingAccount();
-        List<SavingAccount> listSavingAcc = new ArrayList<>();
+
 
         boolean isContinue = true;
         while (isContinue){
@@ -28,30 +29,48 @@ public class SavingAccountMain {
             int n = scanner.nextInt();
             switch (n) {
                 case 1:
-                    inputAccount(listSavingAcc);
+                    inputAccount();
                     break;
                 case 2:
                     showAccount(listSavingAcc);
                     break;
                 case 3:
-                    for (int i = 0; i < listSavingAcc.size(); i++) {
-                        listSavingAcc.get(i).withdrawProfit();
+                    Scanner scanner2 = new Scanner(System.in);
+                    String accountNumber = scanner2.nextLine();
+                    System.out.println("tai khoan vua nhap la: "+accountNumber);
+                    for (SavingAccount account : listSavingAcc) {
+                        System.out.println("tai khoan la: "+ account.getAccountNumber());
+                        System.out.println("");
+                        if ((account.getAccountNumber().equals(accountNumber))) {
+                            account.withdrawProfit(account.getSendingDays());
+                            break;
+                        }
                     }
+
                     break;
                 case 4:
-                    for (int i = 0; i < listSavingAcc.size(); i++) {
-                        listSavingAcc.get(i).withdrawPartialy();
+                    Scanner scanner3 = new Scanner(System.in);
+
+                    String accountNumber1 = scanner3.nextLine();
+                    for (SavingAccount savingAccount:  listSavingAcc) {
+                        if (savingAccount.getAccountNumber().equals(accountNumber1)) {
+                            savingAccount.withdrawPartialy(savingAccount.getSendingDays());
+                        }
                     }
                     break;
                 case 5:
-                    for (int i = 0; i < listSavingAcc.size(); i++) {
-                        listSavingAcc.get(i).totallyWithdraw();
+                    Scanner scanner4 = new Scanner(System.in);
+
+                    String accountNumber2 = scanner4.nextLine();
+                    for (SavingAccount savingAccount : listSavingAcc) {
+                        if(savingAccount.getAccountNumber().equals(accountNumber2)) {
+                            savingAccount.totallyWithdraw(savingAccount.getSendingDays());
+                        }
                     }
                     break;
             }
             System.out.println("Ban co muon tiep tuc khong, Y de tiep tuc else khong: ");
-            Scanner next = new Scanner(System.in);
-            isContinue = next.nextLine().equalsIgnoreCase("Y");
+            isContinue = SavingAccountMain.next.nextLine().equalsIgnoreCase("Y");
         }
 //        listSavingAcc.add(savingAccount);
 //        savingAccount.calculateSendingDate();
@@ -61,17 +80,19 @@ public class SavingAccountMain {
         //savingAccount.totallyWithdraw();
     }
 
-    public static void inputAccount(List<SavingAccount> savingAccountList) throws ParseException {
+    public static void inputAccount() throws ParseException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("So luong tai khoan muon them: ");
         int quantityAccount = scanner.nextInt();
         for (int i = 0; i < quantityAccount; i++) {
-            SavingAccount savingAccount = new SavingAccount();
-            savingAccount.appendNewAcc();
-            savingAccountList.add(savingAccount);
-            System.out.println("Da them tai khoan " + savingAccount.getAccountName() + " vao danh sach");
+            SavingAccount account = new SavingAccount();
+
+            account.appendNewAcc();
+            listSavingAcc.add(account);
+            System.out.println("Da them tai khoan " + account.getAccountName() + " vao danh sach");
         }
-        System.out.println("So luong tai khoan da them " + savingAccountList.size());
+
+        System.out.println("So luong tai khoan da them " + listSavingAcc.size());
 
     }
 
@@ -81,4 +102,5 @@ public class SavingAccountMain {
             savingAccountList.get(i).displayInfo();
         }
     }
+
 }
